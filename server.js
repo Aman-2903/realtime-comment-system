@@ -3,6 +3,7 @@ const app = express();
 const path = require("path");
 const dbConnect = require("./db");
 const Comment = require("./model/comment");
+require("dotenv").config();
 
 //database Connection
 dbConnect();

@@ -1,6 +1,7 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
 function dbConnect() {
-  const DB_URL = "mongodb://localhost:27017/comments";
+  const DB_URL = process.env.DB_URL;
   // Database connection
   mongoose.connect(DB_URL, {
     useNewUrlParser: true,
