@@ -28,7 +28,7 @@ function postComment(comment) {
   // Broadcast
   broadcastComment(data);
   // Sync with Mongo Db
-  // syncWithDb(data)
+  syncWithDb(data);
 }
 
 function appendToDom(data) {
@@ -86,3 +86,31 @@ socket.on("typing", (data) => {
 textarea.addEventListener("keyup", (e) => {
   socket.emit("typing", { username });
 });
+
+function syncWithDb(data) {
+  const headers = {
+    "Content-Type": "application/json",
+  };
+  fetch("/api/comments", {
+    method: "Post",
+    body: JSON.stringify(data),
+    headers,
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      console.log(result);
+    });
+}
+
+function fetchComments() {
+  fetch("/api/comments")
+    .then((res) => res.json())
+    .then((result) => {
+      result.forEach((comment) => {
+        comment.time = comment.createdAt;
+        appendToDom(comment);
+      });
+    });
+}
+
+window.onload = fetchComments;
