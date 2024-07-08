@@ -62,3 +62,27 @@ function broadcastComment(data) {
 socket.on("comment", (data) => {
   appendToDom(data);
 });
+
+let timerId = null;
+
+function debounce(func, timer) {
+  if (timerId) {
+    clearTimeout(timerId);
+  }
+  timerId = setTimeout(() => {
+    func();
+  }, timer);
+}
+
+let typingDiv = document.querySelector(".typing");
+socket.on("typing", (data) => {
+  typingDiv.innerText = `${data.username} is typing...`;
+  debounce(function () {
+    typingDiv.innerText = "";
+  }, 1000);
+});
+
+// Event listner on textarea
+textarea.addEventListener("keyup", (e) => {
+  socket.emit("typing", { username });
+});
